@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Google Maps JavaScript API Example: Simple Map with multiple marker</title>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script type="text/javascript">
+    var poiList = [
+        {
+            'lat'   : 53.353159,
+            'lng'   : 10.015068,
+            'text'  : '<i>Hello World</i>',
+            'title' : 'Marker 1'
+        },
+        {
+            'lat'  : 53.753159,
+            'lng'  : 10.015068,
+            'text' : '<i>Hello World2</i>',
+            'title' : 'Marker 2'
+        },
+        {
+            'lat'  : 53.353159,
+            'lng'  : 10.215068,
+            'text' : '<i>Hello World3</i>',
+            'title' : 'Marker 3'
+        }
+    ];
+
+    (function (poiList) {
+        var map;
+        var infoWindow = new google.maps.InfoWindow({});
+
+        function initialize() {
+            var mapOptions = {
+                zoom: 9,
+                center: new google.maps.LatLng(53.553159, 10.015068),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
+
+            for (var i = 0; i < poiList.length; i++) {
+                (function (i, poiData) {
+                    var marker = new google.maps.Marker({
+                        map       : map,
+                        position  : new google.maps.LatLng(poiData.lat, poiData.lng),
+                        draggable : false,
+                        title     : poiData.title
+                    });
+
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infoWindow.setContent(poiData.text);
+                        infoWindow.open(map, marker);
+                    });
+                })(i, poiList[i]);
+            }
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    })(poiList);
+    </script>
+  </head>
+  <body>
+    <div id="map_canvas" style="width: 500px; height: 500px"></div>
+  </body>
+</html>
